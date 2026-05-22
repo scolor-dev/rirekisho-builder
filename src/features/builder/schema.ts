@@ -16,5 +16,43 @@ export const contactSchema = z.object({
   email: z.string().email('メールアドレスの形式が正しくありません'),
 })
 
-export const resumeSchema = basicInfoSchema.merge(contactSchema)
+export const historyItemSchema = z.object({
+  year: z.string().min(1, '年は必須です'),
+  month: z.string().min(1, '月は必須です'),
+  type: z.enum(['education', 'work']),
+  content: z.string().min(1, '内容は必須です'),
+})
+
+export const historySchema = z.object({
+  histories: z.array(historyItemSchema).min(1, '1件以上入力してください'),
+})
+
+export const qualificationItemSchema = z.object({
+  year: z.string().min(1, '年は必須です'),
+  month: z.string().min(1, '月は必須です'),
+  name: z.string().min(1, '資格名は必須です'),
+})
+
+export const qualificationSchema = z.object({
+  qualifications: z.array(qualificationItemSchema),
+})
+
+export const prSchema = z.object({
+  motivation: z.string().optional(),
+  selfPR: z.string().optional(),
+})
+
+export const preferenceSchema = z.object({
+  preference: z.string().optional(),
+})
+
+export const resumeSchema = basicInfoSchema
+  .merge(contactSchema)
+  .merge(historySchema)
+  .merge(qualificationSchema)
+  .merge(prSchema)
+  .merge(preferenceSchema)
+
 export type ResumeData = z.infer<typeof resumeSchema>
+export type HistoryItem = z.infer<typeof historyItemSchema>
+export type QualificationItem = z.infer<typeof qualificationItemSchema>

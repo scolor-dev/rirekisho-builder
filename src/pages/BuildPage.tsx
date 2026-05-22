@@ -1,15 +1,18 @@
+import { useNavigate } from 'react-router-dom'
 import { STEPS } from '../features/builder'
 import { useBuilder } from '../features/builder/hooks/useBuilder'
 import StepIndicator from '../features/builder/components/StepIndicator'
 
+
+
 export default function BuildPage() {
   const { currentStep, data, next, back, isLast } = useBuilder()
   const CurrentStepComponent = STEPS[currentStep].component
+  const navigate = useNavigate()
 
   const handleNext = (stepData: Record<string, unknown>) => {
     if (isLast) {
-      console.log('完成データ:', { ...data, ...stepData })
-      // TODO: プレビューページへ
+      navigate('/preview', { state: { data: { ...data, ...stepData } } })
     } else {
       next(stepData)
     }
