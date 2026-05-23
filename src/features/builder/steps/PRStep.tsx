@@ -30,7 +30,7 @@ export default function PRStep({ defaultValues, onNext, onBack }: Props) {
           {...register('motivation')}
           rows={4}
           placeholder="志望動機を入力してください"
-          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#3B6D11] resize-none"
+          className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#3B6D11] resize-none"
         />
       </div>
 
@@ -40,15 +40,15 @@ export default function PRStep({ defaultValues, onNext, onBack }: Props) {
           {...register('selfPR')}
           rows={4}
           placeholder="自己PRを入力してください"
-          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#3B6D11] resize-none"
+          className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#3B6D11] resize-none"
         />
       </div>
 
       <div className="flex justify-between pt-2">
-        <button type="button" onClick={onBack} className="text-sm text-gray-500 px-6 py-2.5 rounded-lg border border-gray-200">
+        <button type="button" onClick={onBack} className="text-sm text-gray-500 px-6 py-3 sm:py-2.5 rounded-lg border border-gray-200">
           ← 戻る
         </button>
-        <button type="submit" className="bg-[#3B6D11] text-[#EAF3DE] text-sm font-medium px-6 py-2.5 rounded-lg">
+        <button type="submit" className="bg-[#3B6D11] text-[#EAF3DE] text-sm font-medium px-6 py-3 sm:py-2.5 rounded-lg">
           次へ →
         </button>
       </div>

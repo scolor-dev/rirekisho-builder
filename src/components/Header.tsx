@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export default function Header() {
   return (
-    <header className="bg-white border-b border-gray-200 px-8 h-14 flex items-center justify-between">
+    <header className="bg-white border-b border-gray-200 px-4 sm:px-8 h-14 flex items-center justify-between">
       <Link to="/" className="flex items-center gap-2 text-[15px] font-medium text-gray-800">
         <div className="w-7 h-7 bg-[#3B6D11] rounded-md flex items-center justify-center">
           <span className="text-[#EAF3DE] text-sm">📄</span>

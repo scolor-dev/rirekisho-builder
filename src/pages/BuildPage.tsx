@@ -19,9 +19,9 @@ export default function BuildPage() {
   }
 
   return (
-    <div className="max-w-xl mx-auto py-8">
+    <div className="max-w-xl mx-auto py-2 sm:py-8">
       <StepIndicator currentStep={currentStep} />
-      <div className="bg-white border border-gray-100 rounded-xl p-8">
+      <div className="bg-white border border-gray-100 rounded-xl p-4 sm:p-8">
         <CurrentStepComponent
           defaultValues={data}
           onNext={handleNext}
