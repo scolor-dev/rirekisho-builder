@@ -1,4 +1,4 @@
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer'
+import { Document, Page, Text, View, Image, StyleSheet, Font } from '@react-pdf/renderer'
 import type { ResumeData } from '../../builder/schema'
 
 Font.register({
@@ -30,10 +30,7 @@ const s = StyleSheet.create({
   labelCell: { backgroundColor: '#f5f5f5', fontSize: 7, color: '#444' },
   valueCell: { fontSize: 9 },
   w15: { width: '15%' },
-  w20: { width: '20%' },
-  w25: { width: '25%' },
   w35: { width: '35%' },
-  w50: { width: '50%' },
   w85: { width: '85%' },
   nameText: { fontSize: 16 },
   sectionLabel: {
@@ -78,6 +75,29 @@ const s = StyleSheet.create({
     color: '#3B6D11',
     marginRight: 4,
   },
+  photoBox: {
+    width: 72,
+    marginLeft: 6,
+  },
+  photoImg: {
+    width: 72,
+    height: 96,
+    objectFit: 'cover',
+  },
+  photoEmpty: {
+    width: 72,
+    height: 96,
+    border: '0.5 solid #aaa',
+    backgroundColor: '#fafafa',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  photoLabel: {
+    fontSize: 6,
+    color: '#aaa',
+    textAlign: 'center',
+    marginTop: 2,
+  },
 })
 
 type Props = {
@@ -93,14 +113,13 @@ export default function StandardTemplate({ data }: Props) {
   const genderLabel = data.gender === 'male' ? '男' : data.gender === 'female' ? '女' : 'その他'
   const histories = data.histories ?? []
   const qualifications = data.qualifications ?? []
+  const hasPhoto = !!data.photo
 
-  // 学歴・職歴: 最低16行（1ページ目を充実させる）
   const historyRows = [
     ...histories,
     ...Array(Math.max(0, 16 - histories.length)).fill(null),
   ]
 
-  // 資格（1ページ）: 最低5行
   const qualRowsP1 = [
     ...qualifications,
     ...Array(Math.max(0, 5 - qualifications.length)).fill(null),
@@ -108,44 +127,61 @@ export default function StandardTemplate({ data }: Props) {
 
   return (
     <Document>
-      {/* 1ページ目：基本情報・連絡先・学歴職歴・資格 */}
+      {/* 1ページ目 */}
       <Page size="A4" style={s.page}>
         <Text style={s.title}>履　歴　書</Text>
         <Text style={s.dateRow}>{dateStr}</Text>
 
-        <View style={s.table}>
-          <View style={s.row}>
-            <View style={[s.cell, s.labelCell, s.w15]}><Text>ふりがな</Text></View>
-            <View style={[s.cell, s.valueCell, s.w85]}><Text>{fullNameKana}</Text></View>
-          </View>
-          <View style={s.row}>
-            <View style={[s.cell, s.labelCell, s.w15]}><Text>氏名</Text></View>
-            <View style={[s.cell, s.valueCell, s.w85]}>
-              <Text style={s.nameText}>{fullName}</Text>
+        {/* 基本情報＋写真エリア */}
+        <View style={{ flexDirection: 'row', marginBottom: 6 }}>
+          <View style={{ flex: 1 }}>
+            <View style={s.table}>
+              <View style={s.row}>
+                <View style={[s.cell, s.labelCell, s.w15]}><Text>ふりがな</Text></View>
+                <View style={[s.cell, s.valueCell, s.w85]}><Text>{fullNameKana}</Text></View>
+              </View>
+              <View style={s.row}>
+                <View style={[s.cell, s.labelCell, s.w15]}><Text>氏名</Text></View>
+                <View style={[s.cell, s.valueCell, s.w85]}>
+                  <Text style={s.nameText}>{fullName}</Text>
+                </View>
+              </View>
+              <View style={s.row}>
+                <View style={[s.cell, s.labelCell, s.w15]}><Text>生年月日</Text></View>
+                <View style={[s.cell, s.valueCell, s.w35]}><Text>{data.birthDate ?? ''}</Text></View>
+                <View style={[s.cell, s.labelCell, s.w15]}><Text>性別</Text></View>
+                <View style={[s.cell, s.valueCell, s.w35]}><Text>{genderLabel}</Text></View>
+              </View>
+              <View style={s.row}>
+                <View style={[s.cell, s.labelCell, s.w15]}><Text>郵便番号</Text></View>
+                <View style={[s.cell, s.valueCell, s.w85]}><Text>{data.zipCode ?? ''}</Text></View>
+              </View>
+              <View style={[s.row, { borderBottom: 'none' }]}>
+                <View style={[s.cell, s.labelCell, s.w15]}><Text>住所</Text></View>
+                <View style={[s.cell, s.valueCell, s.w85]}><Text>{data.address ?? ''}</Text></View>
+              </View>
+            </View>
+
+            <View style={s.table}>
+              <View style={[s.row, { borderBottom: 'none' }]}>
+                <View style={[s.cell, s.labelCell, s.w15]}><Text>電話番号</Text></View>
+                <View style={[s.cell, s.valueCell, s.w35]}><Text>{data.phone ?? ''}</Text></View>
+                <View style={[s.cell, s.labelCell, s.w15]}><Text>メール</Text></View>
+                <View style={[s.cell, s.valueCell, s.w35]}><Text>{data.email ?? ''}</Text></View>
+              </View>
             </View>
           </View>
-          <View style={s.row}>
-            <View style={[s.cell, s.labelCell, s.w15]}><Text>生年月日</Text></View>
-            <View style={[s.cell, s.valueCell, s.w35]}><Text>{data.birthDate ?? ''}</Text></View>
-            <View style={[s.cell, s.labelCell, s.w15]}><Text>性別</Text></View>
-            <View style={[s.cell, s.valueCell, s.w35]}><Text>{genderLabel}</Text></View>
-          </View>
-          <View style={s.row}>
-            <View style={[s.cell, s.labelCell, s.w15]}><Text>郵便番号</Text></View>
-            <View style={[s.cell, s.valueCell, s.w85]}><Text>{data.zipCode ?? ''}</Text></View>
-          </View>
-          <View style={[s.row, { borderBottom: 'none' }]}>
-            <View style={[s.cell, s.labelCell, s.w15]}><Text>住所</Text></View>
-            <View style={[s.cell, s.valueCell, s.w85]}><Text>{data.address ?? ''}</Text></View>
-          </View>
-        </View>
 
-        <View style={s.table}>
-          <View style={[s.row, { borderBottom: 'none' }]}>
-            <View style={[s.cell, s.labelCell, s.w15]}><Text>電話番号</Text></View>
-            <View style={[s.cell, s.valueCell, s.w35]}><Text>{data.phone ?? ''}</Text></View>
-            <View style={[s.cell, s.labelCell, s.w15]}><Text>メール</Text></View>
-            <View style={[s.cell, s.valueCell, s.w35]}><Text>{data.email ?? ''}</Text></View>
+          {/* 写真欄（写真あり: 実画像 / 写真なし: 枠のみ） */}
+          <View style={s.photoBox}>
+            {hasPhoto ? (
+              <Image src={data.photo!} style={s.photoImg} />
+            ) : (
+              <View style={s.photoEmpty}>
+                <Text style={{ fontSize: 7, color: '#bbb' }}>写真</Text>
+              </View>
+            )}
+            <Text style={s.photoLabel}>写真貼付欄</Text>
           </View>
         </View>
 
@@ -173,7 +209,7 @@ export default function StandardTemplate({ data }: Props) {
           ))}
         </View>
 
-        {/* 資格・免許（1ページ目に配置してスペースを有効活用） */}
+        {/* 資格・免許 */}
         <Text style={s.sectionLabel}>資格・免許</Text>
         <View style={s.table}>
           <View style={s.qualRow}>
@@ -193,8 +229,6 @@ export default function StandardTemplate({ data }: Props) {
 
       {/* 2ページ目：志望動機・自己PR・本人希望 */}
       <Page size="A4" style={s.page}>
-
-        {/* 志望動機 */}
         <Text style={s.sectionLabel}>志望動機</Text>
         <View style={s.table}>
           <View style={[s.row, { minHeight: 120 }]}>
@@ -204,7 +238,6 @@ export default function StandardTemplate({ data }: Props) {
           </View>
         </View>
 
-        {/* 自己PR */}
         <Text style={s.sectionLabel}>自己PR</Text>
         <View style={s.table}>
           <View style={[s.row, { minHeight: 120 }]}>
@@ -214,7 +247,6 @@ export default function StandardTemplate({ data }: Props) {
           </View>
         </View>
 
-        {/* 本人希望 */}
         <Text style={s.sectionLabel}>本人希望記入欄</Text>
         <View style={s.table}>
           <View style={[s.row, { minHeight: 80 }]}>

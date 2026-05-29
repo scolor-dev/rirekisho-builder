@@ -46,12 +46,19 @@ export const preferenceSchema = z.object({
   preference: z.string().optional(),
 })
 
-export const resumeSchema = basicInfoSchema
-  .merge(contactSchema)
-  .merge(historySchema)
-  .merge(qualificationSchema)
-  .merge(prSchema)
-  .merge(preferenceSchema)
+export const photoSchema = z.object({
+  photo: z.string().optional(),
+})
+
+export const resumeSchema = z.object({
+  ...basicInfoSchema.shape,
+  ...contactSchema.shape,
+  ...historySchema.shape,
+  ...qualificationSchema.shape,
+  ...prSchema.shape,
+  ...preferenceSchema.shape,
+  ...photoSchema.shape,
+})
 
 export type ResumeData = z.infer<typeof resumeSchema>
 export type HistoryItem = z.infer<typeof historyItemSchema>

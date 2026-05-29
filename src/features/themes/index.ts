@@ -10,6 +10,7 @@ import QualificationStep from '../builder/steps/QualificationStep'
 import PRStep from '../builder/steps/PRStep'
 import PreferenceStep from '../builder/steps/PreferenceStep'
 import SimplePRStep from '../builder/steps/SimplePRStep'
+import PhotoStep from '../builder/steps/PhotoStep'
 
 export type Theme = {
   id: string
@@ -22,6 +23,7 @@ export type Theme = {
 }
 
 const standardSteps: Step[] = [
+  { id: 'photo', label: '証明写真', component: PhotoStep as ComponentType<StepProps> },
   { id: 'basic', label: '基本情報', component: BasicInfoStep as ComponentType<StepProps> },
   { id: 'contact', label: '連絡先', component: ContactStep as ComponentType<StepProps> },
   { id: 'history', label: '学歴・職歴', component: HistoryStep as ComponentType<StepProps> },
@@ -31,6 +33,7 @@ const standardSteps: Step[] = [
 ]
 
 const simpleSteps: Step[] = [
+  { id: 'photo', label: '証明写真', component: PhotoStep as ComponentType<StepProps> },
   { id: 'basic', label: '基本情報', component: BasicInfoStep as ComponentType<StepProps> },
   { id: 'contact', label: '連絡先', component: ContactStep as ComponentType<StepProps> },
   { id: 'history', label: '学歴・職歴', component: HistoryStep as ComponentType<StepProps> },

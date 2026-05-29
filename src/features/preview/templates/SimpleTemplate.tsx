@@ -1,4 +1,4 @@
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer'
+import { Document, Page, Text, View, Image, StyleSheet, Font } from '@react-pdf/renderer'
 import type { ResumeData } from '../../builder/schema'
 
 Font.register({
@@ -73,6 +73,29 @@ const s = StyleSheet.create({
     color: '#555',
     marginRight: 3,
   },
+  photoBox: {
+    width: 62,
+    marginLeft: 5,
+  },
+  photoImg: {
+    width: 62,
+    height: 83,
+    objectFit: 'cover',
+  },
+  photoEmpty: {
+    width: 62,
+    height: 83,
+    border: '0.5 solid #aaa',
+    backgroundColor: '#fafafa',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  photoLabel: {
+    fontSize: 5.5,
+    color: '#aaa',
+    textAlign: 'center',
+    marginTop: 2,
+  },
 })
 
 type Props = {
@@ -88,6 +111,7 @@ export default function SimpleTemplate({ data }: Props) {
   const genderLabel = data.gender === 'male' ? '男' : data.gender === 'female' ? '女' : 'その他'
   const histories = data.histories ?? []
   const qualifications = data.qualifications ?? []
+  const hasPhoto = !!data.photo
 
   // 学歴・職歴: 最低12行
   const historyRows = [
@@ -107,7 +131,9 @@ export default function SimpleTemplate({ data }: Props) {
         <Text style={s.title}>履　歴　書</Text>
         <Text style={s.dateRow}>{dateStr}</Text>
 
-        {/* 基本情報 */}
+        {/* 基本情報＋写真エリア */}
+        <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+          <View style={{ flex: 1 }}>
         <View style={s.table}>
           <View style={s.row}>
             <View style={[s.cell, s.labelCell, s.w15]}><Text>ふりがな</Text></View>
@@ -138,6 +164,20 @@ export default function SimpleTemplate({ data }: Props) {
           <View style={[s.row, { borderBottom: 'none' }]}>
             <View style={[s.cell, s.labelCell, s.w15]}><Text>メール</Text></View>
             <View style={[s.cell, s.valueCell, s.w85]}><Text>{data.email ?? ''}</Text></View>
+          </View>
+        </View>
+          </View>
+
+          {/* 写真欄 */}
+          <View style={s.photoBox}>
+            {hasPhoto ? (
+              <Image src={data.photo!} style={s.photoImg} />
+            ) : (
+              <View style={s.photoEmpty}>
+                <Text style={{ fontSize: 6, color: '#bbb' }}>写真</Text>
+              </View>
+            )}
+            <Text style={s.photoLabel}>写真貼付欄</Text>
           </View>
         </View>
 
