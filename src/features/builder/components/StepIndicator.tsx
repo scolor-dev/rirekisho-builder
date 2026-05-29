@@ -1,16 +1,17 @@
-import { STEPS } from '../index'
+import type { Step } from '../index'
 
 type Props = {
   currentStep: number
+  steps: Step[]
 }
 
-export default function StepIndicator({ currentStep }: Props) {
+export default function StepIndicator({ currentStep, steps }: Props) {
   return (
     <div className="mb-6 sm:mb-8">
       {/* モバイル: コンパクト表示 */}
       <div className="flex sm:hidden items-center gap-3 mb-2">
         <div className="flex items-center gap-1.5">
-          {STEPS.map((step, i) => (
+          {steps.map((step, i) => (
             <div
               key={step.id}
               className={`rounded-full transition-all ${
@@ -24,14 +25,14 @@ export default function StepIndicator({ currentStep }: Props) {
           ))}
         </div>
         <span className="text-xs text-gray-500">
-          <span className="font-medium text-gray-700">{currentStep + 1}</span> / {STEPS.length}
-          <span className="ml-1.5 text-gray-600">{STEPS[currentStep].label}</span>
+          <span className="font-medium text-gray-700">{currentStep + 1}</span> / {steps.length}
+          <span className="ml-1.5 text-gray-600">{steps[currentStep].label}</span>
         </span>
       </div>
 
       {/* デスクトップ: フル表示 */}
       <div className="hidden sm:flex items-center gap-2">
-        {STEPS.map((step, i) => (
+        {steps.map((step, i) => (
           <div key={step.id} className="flex items-center gap-2">
             <div className={`flex items-center gap-2 text-sm ${i === currentStep ? 'text-[#3B6D11]' : i < currentStep ? 'text-gray-400' : 'text-gray-300'}`}>
               <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium border
@@ -40,7 +41,7 @@ export default function StepIndicator({ currentStep }: Props) {
               </div>
               <span>{step.label}</span>
             </div>
-            {i < STEPS.length - 1 && (
+            {i < steps.length - 1 && (
               <div className={`w-8 h-px ${i < currentStep ? 'bg-gray-300' : 'bg-gray-200'}`} />
             )}
           </div>

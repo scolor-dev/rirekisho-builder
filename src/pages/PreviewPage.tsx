@@ -1,22 +1,27 @@
-import { useState } from 'react'
 import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { TEMPLATES } from '../features/preview'
+import { THEMES } from '../features/themes'
 import type { ResumeData } from '../features/builder/schema'
 
 export default function PreviewPage() {
   const location = useLocation()
   const navigate = useNavigate()
-  const data = (location.state as { data: Partial<ResumeData> })?.data ?? {}
-  const [selectedTemplate, setSelectedTemplate] = useState(TEMPLATES[0])
+  const state = location.state as { data: Partial<ResumeData>; themeId?: string } | null
+  const data = state?.data ?? {}
+  const theme = THEMES.find(t => t.id === state?.themeId) ?? THEMES[0]
 
-  const TemplateComponent = selectedTemplate.component
+  const TemplateComponent = theme.template
 
   return (
     <div className="max-w-6xl mx-auto py-2 sm:py-8">
-      {/* ヘッダー: モバイルでは縦積み */}
+      {/* ヘッダー */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-        <h1 className="text-lg font-medium text-gray-800">プレビュー</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-lg font-medium text-gray-800">プレビュー</h1>
+          <span className="text-xs bg-[#EAF3DE] text-[#3B6D11] px-2 py-0.5 rounded-full">
+            {theme.label}
+          </span>
+        </div>
         <div className="flex gap-2">
           <button
             onClick={() => navigate(-1)}
@@ -34,30 +39,12 @@ export default function PreviewPage() {
         </div>
       </div>
 
-      {TEMPLATES.length > 1 && (
-        <div className="flex gap-2 mb-4 flex-wrap">
-          {TEMPLATES.map(t => (
-            <button
-              key={t.id}
-              onClick={() => setSelectedTemplate(t)}
-              className={`text-sm px-4 py-2 rounded-lg border ${
-                selectedTemplate.id === t.id
-                  ? 'bg-[#3B6D11] text-[#EAF3DE] border-[#3B6D11]'
-                  : 'border-gray-200 text-gray-600'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-      )}
-
       {/* モバイル向けの注意書き */}
       <p className="sm:hidden text-xs text-gray-400 mb-3 text-center">
         プレビューはPCでの表示を推奨します。PDFダウンロードはモバイルからも利用できます。
       </p>
 
-      {/* PDFビューワー: モバイルは短め、デスクトップは全高 */}
+      {/* PDFビューワー */}
       <PDFViewer
         width="100%"
         height={typeof window !== 'undefined' && window.innerWidth < 640 ? 500 : 900}
